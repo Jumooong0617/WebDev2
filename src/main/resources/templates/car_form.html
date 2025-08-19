@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Add New Car</title>
+    <style>
+        /* Reset some basic styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.8px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: #3f51b5;
+            outline: none;
+            box-shadow: 0 0 8px rgba(63,81,181,0.2);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background: #3f51b5;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #303f9f;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #3f51b5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #303f9f;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add a New Car</h2>
+
+    <form th:action="@{/add}" th:object="${car}" method="post">
+        <label>
+            License Plate Number:
+            <input type="text" th:field="*{licensePlateNumber}" placeholder="e.g. ABC-1234" required />
+        </label>
+
+        <label>
+            Make:
+            <input type="text" th:field="*{make}" placeholder="e.g. Toyota" required />
+        </label>
+
+        <label>
+            Model:
+            <input type="text" th:field="*{model}" placeholder="e.g. Corolla" required />
+        </label>
+
+        <label>
+            Year:
+            <input type="number" th:field="*{year}" min="1886" max="2100" placeholder="e.g. 2021" required />
+        </label>
+
+        <label>
+            Color:
+            <input type="text" th:field="*{color}" placeholder="e.g. Red" required />
+        </label>
+
+        <label>
+            Body Type:
+            <select th:field="*{bodyType}" required>
+                <option value="" disabled selected>Select body type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+            </select>
+        </label>
+
+        <label>
+            Engine Type:
+            <select th:field="*{engineType}" required>
+                <option value="" disabled selected>Select engine type</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+            </select>
+        </label>
+
+        <label>
+            Transmission:
+            <select th:field="*{transmission}" required>
+                <option value="" disabled selected>Select transmission</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+            </select>
+        </label>
+
+        <button type="submit">Add Car</button>
+    </form>
+
+    <a class="back-link" th:href="@{/}">← Back to Car List</a>
+</div>
+</body>
+</html>

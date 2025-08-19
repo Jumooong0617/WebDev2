@@ -1,0 +1,3 @@
+CarID,LicensePlateNumber,Make,Model,Year,Color,BodyType,EngineType,Transmission
+1,NEQ 9382,lamborgeni,143,1886,silver,Sedan,Gasoline,Automatic
+2,asd,lamborgeni,143,1887,red,Sedan,Gasoline,Automatic
