@@ -1,179 +1,168 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-
+/* =======================
+   Global Reset
+   ======================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: #1a202c; /* dark grayish blue */
-    color: #e2e8f0; /* light text */
-    padding: 20px;
+    background-color: #121212; /* asphalt black */
+    color: #f2f2f2;
+    line-height: 1.5;
+    padding: 2rem;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
+/* =======================
+   Page Title
+   ======================= */
+.page-header {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    border-bottom: 3px solid #d32f2f; /* sporty red underline */
+    display: inline-block;
+    padding-bottom: 0.25rem;
 }
 
-h1 {
-    font-weight: 800;
-    color: #38bdf8; /* cyan accent */
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.top-bar {
+/* =======================
+   Top Row (Search + Add)
+   ======================= */
+.top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 15px;
+    margin-bottom: 1.5rem;
 }
 
+/* Search form */
 .search-form {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #2d3748;
-    padding: 8px 14px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 400px;
+    gap: 0.5rem;
 }
 
 .search-form input {
-    flex: 1;
-    padding: 12px 18px;
-    border: 1px solid #4a5568;
-    border-radius: 8px;
-    background: #1a202c;
-    color: #e2e8f0;
-    font-size: 1rem;
-    transition: border 0.3s, box-shadow 0.3s;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #1e1e1e;
+    color: #f2f2f2;
 }
 
-.search-form input:focus {
-    outline: none;
-    border: 1px solid #38bdf8;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+.search-form input::placeholder {
+    color: #888;
 }
 
 .search-form button {
-    padding: 12px 18px;
-    background: #38bdf8;
+    background: #1976d2; /* racing blue */
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    color: black;
-    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
+    transition: background 0.2s ease;
 }
 
 .search-form button:hover {
-    background: #0ea5e9;
-    transform: scale(1.05);
+    background: #1565c0;
 }
 
-/* Table */
+/* Add Car button */
+.add-btn {
+    background: #d32f2f; /* red accent */
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.add-btn:hover {
+    background: #b71c1c;
+}
+
+/* =======================
+   Table
+   ======================= */
 .table-container {
     overflow-x: auto;
-    margin-top: 20px;
+    background: #1e1e1e;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #2d3748;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    min-width: 800px;
 }
 
-th, td {
-    padding: 14px 18px;
+thead {
+    background: #2c2c2c;
+    color: #f5f5f5;
+}
+
+thead th {
+    padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid #4a5568;
-}
-
-th {
-    background: #1a202c;
     font-weight: 600;
-    color: #38bdf8;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #d32f2f;
 }
 
-tr:hover {
-    background: rgba(56, 189, 248, 0.1);
+tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #333;
 }
 
-.actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+tbody tr:nth-child(even) {
+    background: #1a1a1a;
 }
 
-/* Buttons */
-.btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
+tbody tr:nth-child(odd) {
+    background: #222;
+}
+
+tbody tr:hover {
+    background: #333;
+}
+
+td[colspan] {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* =======================
+   Action Buttons
+   ======================= */
+.btn.edit {
+    background: #388e3c; /* green for edit */
+    color: #fff;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
     text-decoration: none;
-    transition: all 0.3s;
+    transition: background 0.2s ease;
 }
 
-.add-btn {
-    background: #22c55e;
-    color: white;
-}
-.add-btn:hover {
-    background: #16a34a;
+.btn.edit:hover {
+    background: #2e7d32;
 }
 
-.view {
-    background: #38bdf8;
-    color: black;
-}
-.view:hover {
-    background: #0ea5e9;
-}
-
-.edit {
-    background: #fbbf24;
-    color: black;
-}
-.edit:hover {
-    background: #f59e0b;
+.btn.delete {
+    background: #d32f2f;
+    color: #fff;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s ease;
 }
 
-.delete {
-    background: #ef4444;
-    color: white;
-}
-.delete:hover {
-    background: #dc2626;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .search-form {
-        width: 100%;
-    }
-
-    .table-container {
-        margin-top: 15px;
-    }
-
-    table {
-        font-size: 0.85rem;
-    }
-
-    th, td {
-        padding: 10px 14px;
-    }
+.btn.delete:hover {
+    background: #b71c1c;
 }

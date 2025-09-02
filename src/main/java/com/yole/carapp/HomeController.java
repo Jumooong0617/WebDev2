@@ -11,29 +11,37 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    CarRepository carRepository;
+    private final CarRepository carRepository;
 
     public HomeController(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
+    // ✅ Home page with search
     @GetMapping("/")
     public String index(@RequestParam(defaultValue = "") String search, Model model) {
-        List<Car> cars = carRepository.findAll(); // ✅ only keep this
-        model.addAttribute("cars", carRepository.findAll());
-//        model.addAttribute("activeMenu", "home");
-        cars.forEach(car -> {
-            System.out.println(car.getMake());
-        });
+        List<Car> cars;
+        if (search.isEmpty()) {
+            cars = carRepository.findAll();
+        } else {
+            cars = carRepository
+                    .findByMakeContainingIgnoreCaseOrLicensePlateNumberContainingIgnoreCaseOrColorContainingIgnoreCaseOrBodyTypeContainingIgnoreCaseOrEngineTypeContainingIgnoreCaseOrTransmissionContainingIgnoreCase(
+                            search, search, search, search, search, search
+                    );
+        }
+        model.addAttribute("cars", cars);
+        model.addAttribute("search", search); // ✅ keep input value after searching
         return "index";
     }
 
+    // ✅ Delete car
     @GetMapping("/delete")
     public String deleteCar(@RequestParam int id) {
         carRepository.deleteById(id);
         return "redirect:/";
     }
 
+    // ✅ Add car page
     @GetMapping("/new")
     public String add(Model model) {
         Car car = new Car();
@@ -45,6 +53,7 @@ public class HomeController {
         return "new";
     }
 
+    // ✅ Save new car
     @PostMapping("/save")
     public String save(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -52,14 +61,14 @@ public class HomeController {
             model.addAttribute("sizes", new String[]{"Automatic", "Manual"});
             return "new";
         }
-
-        carRepository.save(car); // ✅ let service assign ID
+        carRepository.save(car);
         return "redirect:/";
     }
 
+    // ✅ Edit car page
     @GetMapping("/edit")
     public String edit(@RequestParam int id, Model model) {
-        Car c = carRepository.findById(id).get();
+        Car c = carRepository.findById(id).orElse(null);
         if (c != null) {
             model.addAttribute("car", c);
             model.addAttribute("types", new String[]{"Gasoline", "Diesel", "Electric", "Hybrid"});
@@ -69,6 +78,7 @@ public class HomeController {
         return "redirect:/";
     }
 
+    // ✅ Update car
     @PostMapping("/update")
     public String update(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -76,15 +86,7 @@ public class HomeController {
             model.addAttribute("sizes", new String[]{"Automatic", "Manual"});
             return "edit";
         }
-
         carRepository.save(car);
         return "redirect:/";
     }
-
-//    @GetMapping("/car/{id}")
-//    public String view(@PathVariable int id, Model model) {
-//        Car c = carRepository.findById(id).get();
-//        model.addAttribute("car", c);
-//        return "view"; // create a simple view.html
-//    }
 }
