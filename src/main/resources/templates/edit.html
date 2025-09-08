@@ -14,16 +14,16 @@
   <input type="hidden" th:field="*{id}"/>
 
   <label for="make">Make:</label>
-  <input id="make" type="text" th:field="*{make}" required/>
+  <input id="make" type="text" th:field="*{make}"/>
 
   <label for="year">Year:</label>
-  <input id="year" type="number" th:field="*{year}" min="1900" max="2100" required/>
+  <input id="year" type="number" th:field="*{year}" min="1900" max="2100"/>
 
   <label for="licensePlateNumber">License Plate Number:</label>
-  <input id="licensePlateNumber" type="text" th:field="*{licensePlateNumber}" required/>
+  <input id="licensePlateNumber" type="text" th:field="*{licensePlateNumber}"/>
 
   <label for="color">Color:</label>
-  <input id="color" type="text" th:field="*{color}" required/>
+  <input id="color" type="text" th:field="*{color}"/>
 
   <label for="bodyType">Body Type:</label>
   <select id="bodyType" th:field="*{bodyType}">

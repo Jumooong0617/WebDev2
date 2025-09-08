@@ -1,5 +1,6 @@
-package com.yole.carapp;
+package com.yole.carapp.repositories;
 
+import com.yole.carapp.models.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
