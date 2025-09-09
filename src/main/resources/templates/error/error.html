@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Error</title>
-  <link rel="stylesheet" th:href="@{/css/error.css}">
+  <link rel="stylesheet" href="/css/error.css">
 </head>
 <body>
-<h1>Error</h1>
-<p th:text="${message}">Something went wrong</p>
-<a th:href="@{/}">Back to Home</a>
+<div class="error-container">
+  <img src="images/meow.png" alt="error img"/>
+  <h1 class="error-title">Oopsiee! Page Not Found</h1>
+  <p class="error-display">The page you’re looking for cannot be found.</p>
+  <p class="message" th:text="${message}"></p>
+  <a class="home-link" th:href="@{/}">← Back to Home</a>
+</div>
 </body>
 </html>
