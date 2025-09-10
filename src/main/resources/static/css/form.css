@@ -3,10 +3,10 @@
    ======================= */
 body {
     font-family: 'Courier New', monospace;
-    background: linear-gradient(135deg, #3e2723, #1c1c1c);
-    color: #e4d3b7;
-    padding: 20px;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+    color: #f0f0f0;
     margin: 0;
+    padding: 20px;
     line-height: 1.6;
 }
 
@@ -17,29 +17,31 @@ body {
     max-width: 600px;
     margin: 60px auto;
     padding: 40px 32px;
-    background-color: #2a1a18;
+    background-color: #121212;
     border-radius: 14px;
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container:hover {
     transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
 }
 
 /* =======================
    Heading
    ======================= */
 h1 {
-    color: #d7a86e;
+    background: linear-gradient(90deg, #ff4c4c, #b22222);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
     font-weight: 900;
     margin-bottom: 32px;
     font-size: 2.2em;
     letter-spacing: 1px;
     text-transform: uppercase;
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
 /* =======================
@@ -48,7 +50,7 @@ h1 {
 .car-form label {
     display: block;
     font-weight: 600;
-    color: #e4d3b7;
+    color: #f0f0f0;
     margin-top: 20px;
     margin-bottom: 6px;
     font-size: 0.95em;
@@ -63,11 +65,10 @@ h1 {
 .car-form select {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #5c3b34;
+    border: 1px solid #2a2a2a;
     border-radius: 8px;
-    color: #e4d3b7;
-    background-color: #1e1e1e;
-    box-sizing: border-box;
+    color: #f0f0f0;
+    background-color: #1a1a1a;
     font-size: 1em;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
@@ -75,37 +76,36 @@ h1 {
 .car-form input[type="text"]:focus,
 .car-form input[type="number"]:focus,
 .car-form select:focus {
-    border-color: #d32f2f;
-    box-shadow: 0 0 8px rgba(211, 47, 47, 0.65);
-    background: #262626;
+    border-color: #ff4c4c;
+    box-shadow: 0 0 8px rgba(255, 76, 76, 0.65);
+    background: #222;
     outline: none;
 }
 
 /* =======================
-   Add Button
+   Submit Button
    ======================= */
 button.add-button {
     margin-top: 28px;
     padding: 14px 20px;
-    background: linear-gradient(135deg, #5c1b1b, #3e2723);
-    color: #ffeaea;
-    border: 2px solid #d7a86e;
+    background: linear-gradient(135deg, #b22222, #8b0000);
+    color: #fff;
+    border: 2px solid #ff4c4c;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     font-size: 1.05em;
-    transition: background 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
     width: 100%;
-    box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    transition: background 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
 }
 
 button.add-button:hover {
-    background: linear-gradient(135deg, #3e2723, #5c1b1b);
+    background: linear-gradient(135deg, #8b0000, #ff1a1a);
     color: #fff0f0;
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(92, 27, 27, 0.6);
+    box-shadow: 0 6px 14px rgba(255, 0, 0, 0.6);
 }
 
 /* =======================
@@ -115,40 +115,37 @@ a.back-link {
     display: block;
     margin-top: 20px;
     padding: 12px 20px;
-    background: linear-gradient(135deg, #5c1b1b, #3e2723);
-    color: #ffeaea;
+    background: linear-gradient(135deg, #8b0000, #b22222);
+    color: #fff;
     text-align: center;
     text-decoration: none;
-    border: 2px solid #d7a86e;
+    border: 2px solid #ff4c4c;
     border-radius: 8px;
     font-weight: bold;
     font-size: 1em;
-    transition: background 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    transition: background 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
 }
 
 a.back-link:hover {
-    background: linear-gradient(135deg, #3e2723, #5c1b1b);
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
     color: #fff0f0;
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(92, 27, 27, 0.6);
+    box-shadow: 0 6px 14px rgba(255, 0, 0, 0.6);
 }
 
 /* =======================
    Error Messages
    ======================= */
 .error {
-    color: #ff5555;
-    background-color: #3e1f1f;
-    border-left: 4px solid #d32f2f;
+    color: #ff4c4c;
+    background-color: #1f0f0f;
+    border-left: 4px solid #ff1a1a;
     padding: 8px 12px;
     font-size: 0.85em;
     margin-top: 6px;
     margin-bottom: 10px;
     font-weight: 600;
     border-radius: 6px;
-    box-sizing: border-box;
 }
