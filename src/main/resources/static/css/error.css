@@ -1,10 +1,7 @@
-/* =======================
-   Global Styles
-   ======================= */
 body {
     font-family: 'Courier New', monospace;
-    background: linear-gradient(135deg, #3e2723, #1c1c1c);
-    color: #e4d3b7;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a); /* deep black gradient */
+    color: #fff0f0;
     padding: 40px;
     margin: 0;
     display: flex;
@@ -14,13 +11,10 @@ body {
     box-sizing: border-box;
 }
 
-/* =======================
-   Error Container
-   ======================= */
 .error-container {
-    background-color: #2a1a18; /* dark rustic brown */
-    border: 1px solid #5c3b34; /* muted red-brown border */
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+    background-color: #1c1c1c; /* dark black */
+    border: 1px solid #8b0000; /* deep red border */
+    box-shadow: 0 12px 28px rgba(139, 0, 0, 0.6);
     border-radius: 14px;
     padding: 45px 55px;
     text-align: center;
@@ -30,29 +24,23 @@ body {
 }
 
 .error-container:hover {
-    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 16px 38px rgba(255, 0, 0, 0.75);
     transform: translateY(-4px);
 }
 
-/* =======================
-   Error Title
-   ======================= */
 .error-title {
     font-size: 2.6em;
     font-weight: bold;
     margin: 0 0 18px 0;
-    color: #d7a86e; /* golden beige */
+    color: #ff4c4c; /* bright red */
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 3px 6px rgba(255, 0, 0, 0.6);
 }
 
-/* =======================
-   Error Message
-   ======================= */
 .error-display {
     font-size: 1.25em;
-    color: #e4d3b7;
+    color: #fff0f0; /* off-white for readability */
     margin-bottom: 35px;
     line-height: 1.8;
 }
@@ -61,18 +49,15 @@ body {
     display: none;
 }
 
-/* =======================
-   Home Link Button
-   ======================= */
 .home-link {
     display: inline-block;
     padding: 14px 26px;
-    background: linear-gradient(135deg, #5c1b1b, #3e2723);
-    color: #ffeaea;
+    background: linear-gradient(135deg, #b22222, #8b0000); /* deep red gradient */
+    color: #fff0f0;
     text-decoration: none;
     font-weight: bold;
     border-radius: 8px;
-    border: 2px solid #d7a86e;
+    border: 2px solid #ff4c4c;
     font-size: 1em;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -85,16 +70,13 @@ body {
 }
 
 .home-link:hover {
-    background: linear-gradient(135deg, #3e2723, #5c1b1b);
-    color: #fff0f0;
-    border-color: #e4d3b7;
+    background: linear-gradient(135deg, #8b0000, #b22222);
+    color: #fff;
+    border-color: #ff4c4c;
     transform: translateY(-3px);
-    box-shadow: 0 5px 14px rgba(92, 27, 27, 0.6);
+    box-shadow: 0 5px 14px rgba(255, 0, 0, 0.6);
 }
 
-/* =======================
-   Responsive
-   ======================= */
 @media (max-width: 600px) {
     body {
         padding: 20px;

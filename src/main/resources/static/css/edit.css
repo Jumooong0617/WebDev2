@@ -166,3 +166,23 @@ form select:focus {
         flex-direction: column;
     }
 }
+
+a.button {
+    display: inline-block;
+    flex: 1;
+    min-width: 120px;
+    padding: 0.75rem 1rem;
+    background: #444; /* same as reset input button */
+    color: #fff;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+a.button:hover {
+    background: #666; /* hover effect same as reset input button */
+    transform: translateY(-2px);
+}

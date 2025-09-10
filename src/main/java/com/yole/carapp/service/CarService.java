@@ -59,4 +59,12 @@ public class CarService {
     public void delete(Long id) {
         carRepository.deleteById(id);
     }
+
+    // ✅ New: Search method
+    public List<Car> searchCars(String keyword) {
+        return carRepository
+                .findByMakeContainingIgnoreCaseOrModelContainingIgnoreCaseOrLicensePlateNumberContainingIgnoreCase(
+                        keyword, keyword, keyword
+                );
+    }
 }

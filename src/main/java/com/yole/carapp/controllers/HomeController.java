@@ -21,36 +21,48 @@ public class HomeController {
         this.carService = carService;
     }
 
+    // ✅ Show list of cars with optional search
     @GetMapping
-    public String index(Model model) {
-        List<Car> cars = carService.getAllCars();
+    public String index(@RequestParam(value = "search", required = false) String search, Model model) {
+        List<Car> cars;
+
+        if (search != null && !search.trim().isEmpty()) {
+            cars = carService.searchCars(search); // filtered list
+        } else {
+            cars = carService.getAllCars(); // full list
+        }
+
         model.addAttribute("cars", cars);
+        model.addAttribute("search", search); // keep search value in input
         return "index";
     }
 
+    // ✅ Show add form
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("carDTO", new CarDTO());
         return "new";
     }
 
+    // ✅ Save new car
     @PostMapping("/save")
     public String saveCar(@Valid @ModelAttribute("carDTO") CarDTO carDTO,
                           BindingResult result) {
         if (result.hasErrors()) {
             return "new";
         }
-
         carService.save(carDTO);
         return "redirect:/";
     }
 
+    // ✅ Delete car
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable Long id) {
         carService.delete(id);
         return "redirect:/";
     }
 
+    // ✅ Show edit form (pre-filled)
     @GetMapping("/edit/{id}")
     public String editCar(@PathVariable Long id, Model model) {
         Car car = carService.getCarById(id);
@@ -71,6 +83,7 @@ public class HomeController {
         return "edit";
     }
 
+    // ✅ Update car
     @PostMapping("/update/{id}")
     public String storeUpdateCar(@PathVariable Long id,
                                  @Valid @ModelAttribute("carDTO") CarDTO carDTO,
@@ -80,8 +93,16 @@ public class HomeController {
             model.addAttribute("carId", id);
             return "edit";
         }
-
         carService.update(id, carDTO);
         return "redirect:/";
+    }
+
+    // ✅ Edit with empty fields (reset button)
+    @GetMapping("/edit-empty")
+    public String editEmptyCar(@RequestParam Long id, Model model) {
+        CarDTO carDTO = new CarDTO(); // keep empty
+        model.addAttribute("carDTO", carDTO);
+        model.addAttribute("carId", id); // preserve ID
+        return "edit";
     }
 }
