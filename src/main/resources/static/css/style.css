@@ -1,168 +1,131 @@
-/* =======================
-   Global Reset
-   ======================= */
-* {
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
 }
 
-body {
-    background-color: #121212; /* asphalt black */
-    color: #f2f2f2;
-    line-height: 1.5;
-    padding: 2rem;
+h1 {
+    margin: 20px 0;
+    font-weight: 600;
+    font-size: 26px;
+    text-align: center;
+    color: #3e2723;
 }
 
-/* =======================
-   Page Title
-   ======================= */
-.page-header {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #e0e0e0;
-    border-bottom: 3px solid #d32f2f; /* sporty red underline */
-    display: inline-block;
-    padding-bottom: 0.25rem;
-}
-
-/* =======================
-   Top Row (Search + Add)
-   ======================= */
-.top-row {
+.top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    width: 90%;
+    max-width: 800px;
+    margin: 16px 0;
 }
 
-/* Search form */
-.search-form {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.search-form input {
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    border: 1px solid #444;
-    background: #1e1e1e;
-    color: #f2f2f2;
-}
-
-.search-form input::placeholder {
-    color: #888;
-}
-
-.search-form button {
-    background: #1976d2; /* racing blue */
+button,
+a.button {
+    background-color: #d7a86e;
     color: #fff;
     border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.search-form button:hover {
-    background: #1565c0;
-}
-
-/* Add Car button */
-.add-btn {
-    background: #d32f2f; /* red accent */
-    color: #fff;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-weight: 600;
+    padding: 8px 16px;
     text-decoration: none;
-    transition: background 0.2s ease;
-}
-
-.add-btn:hover {
-    background: #b71c1c;
-}
-
-/* =======================
-   Table
-   ======================= */
-.table-container {
-    overflow-x: auto;
-    background: #1e1e1e;
-    padding: 1rem;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover,
+a.button:hover {
+    background-color: #b87f4d;
+    transform: translateY(-1px);
+}
+
+.logout-form {
+    display: inline;
 }
 
 table {
-    width: 100%;
+    width: 90%;
+    max-width: 800px;
     border-collapse: collapse;
-    min-width: 800px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-thead {
-    background: #2c2c2c;
-    color: #f5f5f5;
-}
-
-thead th {
-    padding: 0.75rem;
+th,
+td {
+    padding: 12px 14px;
     text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+th {
+    background-color: #f4ece4;
     font-weight: 600;
-    font-size: 0.95rem;
-    border-bottom: 2px solid #d32f2f;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: #3e2723;
 }
 
-tbody td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #333;
+tr:hover td {
+    background-color: #fff8f0;
 }
 
-tbody tr:nth-child(even) {
-    background: #1a1a1a;
-}
-
-tbody tr:nth-child(odd) {
-    background: #222;
-}
-
-tbody tr:hover {
-    background: #333;
-}
-
-td[colspan] {
-    text-align: center;
-    color: #aaa;
-    font-style: italic;
-}
-
-/* =======================
-   Action Buttons
-   ======================= */
-.btn.edit {
-    background: #388e3c; /* green for edit */
-    color: #fff;
-    padding: 0.3rem 0.75rem;
-    border-radius: 6px;
+.actions a {
+    color: #b87f4d;
     text-decoration: none;
-    transition: background 0.2s ease;
+    margin-right: 6px;
+    font-weight: 500;
+    transition: color 0.2s ease;
 }
 
-.btn.edit:hover {
-    background: #2e7d32;
+.actions a:hover {
+    text-decoration: underline;
+    color: #8b5e34;
 }
 
-.btn.delete {
-    background: #d32f2f;
-    color: #fff;
-    padding: 0.3rem 0.75rem;
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+input[type="text"],
+input[type="email"] {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
     border-radius: 6px;
-    text-decoration: none;
-    transition: background 0.2s ease;
+    font-size: 14px;
+    background-color: #fffdfc;
+    transition: 0.3s ease;
 }
 
-.btn.delete:hover {
-    background: #b71c1c;
+input[type="text"]:focus,
+input[type="email"]:focus {
+    border-color: #d7a86e;
+    box-shadow: 0 0 6px rgba(215, 168, 110, 0.4);
+    outline: none;
+}
+
+.error {
+    color: #c0392b;
+    font-size: 13px;
+    margin-top: -4px;
 }

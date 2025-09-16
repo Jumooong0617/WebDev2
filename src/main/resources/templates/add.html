@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Edit Employee</title>
+  <title>Add Employee</title>
   <link rel="stylesheet" th:href="@{/css/form.css}">
 </head>
 <body>
 <div class="form-container">
-  <h1>Edit Employee</h1>
+  <h1>Add Employee</h1>
 
-  <form th:action="@{/edit/{id}(id=${employee.id})}" th:object="${employee}" method="post">
-
-    <input type="hidden" th:field="*{id}"/>
-
+  <form th:action="@{/add}" th:object="${employee}" method="post">
     <div class="form-group">
       <label for="name">Name</label>
       <input type="text" id="name" th:field="*{name}" />
@@ -27,8 +24,8 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="button">Update</button>
-      <a th:href="@{/}" class="button secondary">Cancel</a>
+      <button type="submit" class="button">Save</button>
+      <a th:href="@{/}" class="button secondary">Back</a>
     </div>
   </form>
 </div>

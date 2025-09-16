@@ -1,64 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cars</title>
+    <title>Employee List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<main>
+<h1>Employee List</h1>
 
-    <h1 class="page-header">Car List</h1>
+<div class="top-bar">
+    <a class="button" th:href="@{/add}">+ Add Employee</a>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit">Logout</button>
+    </form>
+</div>
 
-    <div class="top-row">
-        <form th:action="@{/}" method="get" class="search-form">
-            <input type="text" name="search" placeholder="Search cars..." th:value="${param.search}">
-            <button type="submit">Search</button>
-        </form>
 
-        <a th:href="@{/new}" class="btn add-btn">Add Car</a>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Make</th>
-                <th>Year</th>
-                <th>License Plate</th>
-                <th>Color</th>
-                <th>Body Type</th>
-                <th>Engine Type</th>
-                <th>Transmission</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="car, iterStat : ${cars}">
-                <td th:text="${iterStat.index + 1}"></td>
-                <td th:text="${car.make}"></td>
-                <td th:text="${car.year}"></td>
-                <td th:text="${car.licensePlateNumber}"></td>
-                <td th:text="${car.color}"></td>
-                <td th:text="${car.bodyType}"></td>
-                <td th:text="${car.engineType}"></td>
-                <td th:text="${car.transmission}"></td>
-                <td>
-                    <a th:href="@{/edit(id=${car.id})}" class="btn edit">Edit</a>
-                    <a th:href="@{/delete(id=${car.id})}" class="btn delete"
-                       onclick="return confirm('Deleting this means you can no longer access it. Proceed?');">
-                        Delete
-                    </a>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(cars)}">
-                <td colspan="9">No cars found.</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</main>
+<table>
+    <tr>
+        <th>ID</th><th>Name</th><th>Email</th><th>Actions</th>
+    </tr>
+    <tr th:each="emp : ${employees}">
+        <td th:text="${emp.id}"></td>
+        <td th:text="${emp.name}"></td>
+        <td th:text="${emp.email}"></td>
+        <td class="actions">
+            <a th:href="@{/edit/{id}(id=${emp.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${emp.id})}">Delete</a>
+        </td>
+    </tr>
+</table>
 </body>
 </html>
