@@ -1,5 +1,7 @@
-package com.yole.carapp;
+package com.yole.carapp.controller;
 
+import com.yole.carapp.entity.Car;
+import com.yole.carapp.repositories.CarRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

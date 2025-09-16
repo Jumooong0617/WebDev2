@@ -1,4 +1,4 @@
-package com.yole.carapp;
+package com.yole.carapp.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
