@@ -1,6 +1,7 @@
 package com.yole.carapp.controller;
 
 
+import com.yole.carapp.dto.EmployeeDTO;
 import com.yole.carapp.entity.Employee;
 import com.yole.carapp.repositories.EmployeeRepository;
 import jakarta.validation.Valid;
@@ -10,59 +11,108 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
-@RequestMapping("/")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
-    @GetMapping
-    public String index(Model model) {
-        model.addAttribute("employees", employeeRepository.findAll());
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    @GetMapping("/")
+    public String index(@RequestParam(required = false) String keyword, Model model) {
+        List<Employee> employees;
+        if (keyword != null && !keyword.isEmpty()) {
+            employees = employeeRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword, keyword);
+        } else {
+            employees = employeeRepository.findAll();
+        }
+        model.addAttribute("employees", employees);
+        model.addAttribute("keyword", keyword);
         return "index";
     }
 
-    @GetMapping("/add")
-    public String addForm(Model model) {
-        model.addAttribute("employee", new Employee());
-        return "add";
-    }
-
-    @PostMapping("/add")
-    public String saveEmployee(@Valid @ModelAttribute Employee employee, BindingResult result) {
-        if (result.hasErrors()) {
-            return "add";
-        }
-        if (employeeRepository.existsByEmail(employee.getEmail())) {
-            result.rejectValue("email", "error.employee", "Email already exists!");
-            return "add";
-        }
-        employeeRepository.save(employee);
-        return "redirect:/";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee with ID " + id + " not found!"));
-        model.addAttribute("employee", employee);
-        return "edit";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String updateEmployee(@PathVariable Long id, @Valid @ModelAttribute Employee employee, BindingResult result) {
-        if (result.hasErrors()) {
-            return "edit";
-        }
-        employee.setId(id);
-        employeeRepository.save(employee);
-        return "redirect:/";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
+    @GetMapping("/delete")
+    public String deleteEmployee(@RequestParam Long id) {
         employeeRepository.deleteById(id);
         return "redirect:/";
     }
+
+    @GetMapping("/new")
+    public String add(Model model) {
+        model.addAttribute("employee", new EmployeeDTO());
+        return "add";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("employee") @Valid EmployeeDTO employeeDTO,
+                       BindingResult bindingResult,
+                       Model model) {
+
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            bindingResult.rejectValue("email", "error.email", "Email already exists");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "add";
+        }
+
+        Employee newEmployee = new Employee();
+        newEmployee.setName(employeeDTO.getName());
+        newEmployee.setEmail(employeeDTO.getEmail());
+
+        employeeRepository.save(newEmployee);
+        return "redirect:/";
+    }
+
+    @GetMapping("/edit")
+    public String edit(@RequestParam Long id, Model model) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        if (employee != null) {
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            employeeDTO.setId(employee.getId());
+            employeeDTO.setName(employee.getName());
+            employeeDTO.setEmail(employee.getEmail());
+
+            model.addAttribute("employee", employeeDTO);
+            model.addAttribute("employeeId", id);
+            return "edit";
+        }
+
+        model.addAttribute("message", "This ID isn't available. Sorry about that.");
+        return "error/error";
+    }
+
+    @PostMapping("/update")
+    public String update(@Valid @ModelAttribute("employee") EmployeeDTO employeeDTO,
+                         BindingResult bindingResult,
+                         Model model) {
+
+        Long id = employeeDTO.getId();
+
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail()) &&
+                !employeeRepository.findById(id).get().getEmail().equals(employeeDTO.getEmail())) {
+            bindingResult.rejectValue("email", "error.email", "Email already exists");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("employeeId", id);
+            return "edit";
+        }
+
+        Employee existingEmployee = employeeRepository.findById(id).orElse(null);
+        if (existingEmployee == null) {
+            return "redirect:/";
+        }
+
+        existingEmployee.setName(employeeDTO.getName());
+        existingEmployee.setEmail(employeeDTO.getEmail());
+
+        employeeRepository.save(existingEmployee);
+        return "redirect:/";
+    }
+
 }

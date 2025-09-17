@@ -2,7 +2,13 @@ package com.yole.carapp.repositories;
 
 import com.yole.carapp.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    List<Employee> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String nameKeyword, String emailKeyword);
+
     boolean existsByEmail(String email);
 }

@@ -4,18 +4,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 @ControllerAdvice
 public class GlobalException {
 
-    @ExceptionHandler({ResourceNotFoundException.class})
+    @ExceptionHandler(ResourceNotFoundException.class)
     public String handleResourceNotFound(ResourceNotFoundException ex, Model model) {
-        model.addAttribute("message", ex.getMessage());
-        return "error/error";  // Thymeleaf template: templates/error/error.html
+        model.addAttribute("message", "This id isn't available. Sorry about that.");
+        return "error/error";
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler(Exception.class)
     public String handleGenericException(Exception ex, Model model) {
-        model.addAttribute("message", "Unexpected error: " + ex.getMessage());
+        model.addAttribute("message", "This page isn't available. Sorry about that.");
         return "error/error";
     }
 }

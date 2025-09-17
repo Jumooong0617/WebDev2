@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Add Employee</title>
-  <link rel="stylesheet" th:href="@{/css/form.css}">
+  <link rel="stylesheet" th:href="@{/css/form.css}" />
 </head>
 <body>
-<div class="form-container">
-  <h1>Add Employee</h1>
+<main>
+  <form th:action="@{/save}" th:object="${employee}" method="post" class="employee-form" novalidate>
+    <h1>Add New Employee</h1>
 
-  <form th:action="@{/add}" th:object="${employee}" method="post">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" id="name" th:field="*{name}" />
-      <div class="error" th:if="${#fields.hasErrors('name')}"
-           th:errors="*{name}">Name Error</div>
-    </div>
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" th:field="*{name}"
+           th:classappend="${#fields.hasErrors('name')} ? 'error' : ''" />
+    <div class="error"
+         th:if="${#fields.hasErrors('name')}"
+         th:text="${#fields.errors('name')[0]}"></div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" th:field="*{email}" />
-      <div class="error" th:if="${#fields.hasErrors('email')}"
-           th:errors="*{email}">Email Error</div>
-    </div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{email}"
+           th:classappend="${#fields.hasErrors('email')} ? 'error' : ''" />
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
 
     <div class="form-actions">
-      <button type="submit" class="button">Save</button>
-      <a th:href="@{/}" class="button secondary">Back</a>
+      <button type="submit" class="btn save">Save Employee</button>
+      <a th:href="@{/}" class="btn cancel">Cancel</a>
     </div>
   </form>
-</div>
+</main>
 </body>
 </html>
