@@ -22,7 +22,7 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new Object());
-        return "register"; // register.html
+        return "register";
     }
 
     @PostMapping("/register")
