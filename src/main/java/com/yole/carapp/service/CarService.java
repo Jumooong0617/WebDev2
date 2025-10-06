@@ -89,4 +89,8 @@ public class CarService {
                 .orElseThrow(() -> new ResourceNotFoundException("Car", id));
         carRepository.delete(car);
     }
+
+    public Car findById(Long id){
+        return carRepository.findById(id).orElse(null);
+    }
 }

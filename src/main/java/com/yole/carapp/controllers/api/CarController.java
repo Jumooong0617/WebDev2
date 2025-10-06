@@ -1,11 +1,12 @@
-package com.yole.carapp.controllers;
+package com.yole.carapp.controllers.api;
 
 import com.yole.carapp.dto.CarDTO;
 import com.yole.carapp.models.Car;
-import com.yole.carapp.repositories.CarRepository;
 import com.yole.carapp.service.CarService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -19,24 +20,30 @@ public class CarController {
         this.carService = carService;
     }
 
-
     @GetMapping("/cars")
-    public List<Car> getAllCars() {
+    public List<Car> getAllCars(){
         return carService.findAll();
     }
 
     @PostMapping("/cars")
-    public Car newCar(@Valid @RequestBody CarDTO car) {
+    public Car newCar(@Valid @RequestBody CarDTO car){
         return carService.save(car);
     }
 
-    @PutMapping("/car/{id}")
+    @PutMapping("/cars/{id}")
     public Car updateCar(@PathVariable Long id, @Valid @RequestBody CarDTO car) {
+        if (carService.findById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found.");
+        }
         return carService.updateCar(id, car);
     }
 
+
     @DeleteMapping("/cars/{id}")
-    public void deleteCar(@PathVariable Long id) {
+    public void deleteCar(@PathVariable Long id){
+        if(carService.findById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID "+ id + " not found.");
+        }
         carService.deleteCar(id);
     }
 
