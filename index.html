@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Car List</h1>
+      <button onclick="openCreateModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Car</button>
+    </div>
+
+    <table class="w-full border-collapse border border-gray-300 bg-white">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2 border">Car ID</th>
+          <th class="p-2 border">License Plate</th>
+          <th class="p-2 border">Make</th>
+          <th class="p-2 border">Model</th>
+          <th class="p-2 border">Year</th>
+          <th class="p-2 border">Color</th>
+          <th class="p-2 border">Body Type</th>
+          <th class="p-2 border">Engine Type</th>
+          <th class="p-2 border">Transmission</th>
+          <th class="p-2 border">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="carsTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+      <h2 id="modalTitle" class="text-xl font-semibold mb-4">Add Car</h2>
+      
+      <form id="carForm" onsubmit="saveCar(event)">
+        <input type="hidden" id="carId">
+
+        <div class="mb-3">
+          <label class="block text-gray-700">License Plate</label>
+          <input type="text" id="licensePlateNumber" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Make</label>
+          <input type="text" id="make" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Model</label>
+          <input type="text" id="model" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Year</label>
+          <input type="number" id="year" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Color</label>
+          <input type="text" id="color" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Body Type</label>
+          <input type="text" id="bodyType" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-gray-700">Engine Type</label>
+          <input type="text" id="engineType" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700">Transmission</label>
+          <input type="text" id="transmission" class="border p-2 w-full rounded focus:border-black" required>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button type="button" onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
