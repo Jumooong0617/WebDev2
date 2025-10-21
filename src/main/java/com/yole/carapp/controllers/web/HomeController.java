@@ -1,4 +1,4 @@
-package com.yole.carapp.controllers;
+package com.yole.carapp.controllers.web;
 
 import com.yole.carapp.dto.CarDTO;
 import com.yole.carapp.models.Car;
