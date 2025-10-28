@@ -5,6 +5,7 @@ function toggleAuth(type) {
   document.getElementById("loginForm").classList.toggle("hidden", type === "register");
   document.getElementById("registerForm").classList.toggle("hidden", type === "login");
   clearAuthFields();
+  clearErrors();
 }
 
 function clearAuthFields() {
@@ -14,54 +15,105 @@ function clearAuthFields() {
   document.getElementById("regPassword").value = "";
 }
 
+function clearErrors() {
+  document.querySelectorAll(".error-text").forEach(e => e.remove());
+}
+
+function showError(inputId, message, type = "error") {
+  const input = document.getElementById(inputId);
+  const error = document.createElement("p");
+  error.className = `error-text text-sm mt-1 ${type === "error" ? "text-red-500" : "text-green-400"}`;
+  error.textContent = message;
+  input.insertAdjacentElement("afterend", error);
+}
+
 function login() {
+  clearErrors();
   const username = document.getElementById("loginUsername").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
 
-  if (!username || !password) {
-    alert("Please fill in both fields.");
-    return;
+  let hasError = false;
+  if (!username) {
+    showError("loginUsername", "Username is required");
+    hasError = true;
   }
+  if (!password) {
+    showError("loginPassword", "Password is required");
+    hasError = true;
+  }
+  if (hasError) return;
 
   fetch(`${authBase}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   })
-    .then(res => {
-      if (!res.ok) throw new Error("Login failed");
-      return res.json();
+    .then(async (res) => {
+      let responseText = await res.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { message: responseText };
+      }
+      if (!res.ok) {
+        throw new Error(data.message || "Invalid username or password");
+      }
+      return data;
     })
-    .then(data => {
+    .then((data) => {
       localStorage.setItem("token", data.token);
       document.getElementById("authSection").classList.add("hidden");
       document.getElementById("appSection").classList.remove("hidden");
       fetchCars();
       clearAuthFields();
     })
-    .catch(err => alert("Invalid credentials or server error."));
+    .catch((err) => {
+      showError("loginPassword", err.message || "Invalid credentials");
+    });
 }
 
 function register() {
+  clearErrors();
   const username = document.getElementById("regUsername").value.trim();
   const password = document.getElementById("regPassword").value.trim();
 
-  if (!username || !password) {
-    alert("Please fill in both fields.");
-    return;
+  let hasError = false;
+  if (!username) {
+    showError("regUsername", "Username is required");
+    hasError = true;
   }
+  if (!password) {
+    showError("regPassword", "Password is required");
+    hasError = true;
+  }
+  if (hasError) return;
 
   fetch(`${authBase}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   })
-    .then(res => {
-      if (!res.ok) throw new Error("Registration failed");
-      alert("Registration successful! You can now log in.");
-      toggleAuth("login");
+    .then(async (res) => {
+      let responseText = await res.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { message: responseText };
+      }
+      if (!res.ok) {
+        throw new Error(data.message || "Registration failed. Username might already exist.");
+      }
+      return data;
     })
-    .catch(() => alert("Registration failed. Username might already exist."));
+    .then(() => {
+      showError("regPassword", "Registration successful. You can now log in.", "success");
+      setTimeout(() => toggleAuth("login"), 2000);
+    })
+    .catch((err) => {
+      showError("regUsername", err.message || "Username already exists");
+    });
 }
 
 function logout() {
@@ -81,7 +133,6 @@ function fetchCars() {
     .then(cars => {
       const tbody = document.getElementById("carsTableBody");
       tbody.innerHTML = "";
-
       cars.forEach(car => {
         tbody.innerHTML += `
           <tr class="text-center">
@@ -173,7 +224,6 @@ function saveCar(e) {
 
 function deleteCar(id) {
   if (!confirm("Delete this car?")) return;
-
   fetch(`${apiBase}/${id}`, { method: "DELETE" })
     .then(res => {
       if (!res.ok) throw new Error("Failed to delete car");
