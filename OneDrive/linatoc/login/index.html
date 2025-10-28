@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="main.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 min-h-screen font-sans">
+
+  <div id="authSection" class="flex flex-col items-center justify-center h-screen">
+    <div class="bg-gray-900 border border-gray-700 shadow-xl rounded-xl p-8 w-96">
+      <h1 class="text-3xl font-extrabold mb-6 text-center text-blue-400">Car Management</h1>
+
+      <div id="loginForm">
+        <h2 class="text-xl font-semibold mb-3 text-center">Login</h2>
+        <input id="loginUsername" type="text" placeholder="Username" class="border border-gray-700 bg-gray-800 text-gray-200 p-3 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        <input id="loginPassword" type="password" placeholder="Password" class="border border-gray-700 bg-gray-800 text-gray-200 p-3 w-full mb-4 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        <button onclick="login()" class="bg-blue-600 hover:bg-blue-700 w-full py-2 rounded-lg font-semibold shadow transition">Login</button>
+        <p class="mt-4 text-center text-sm text-gray-400">No account? <a href="#" onclick="toggleAuth('register')" class="text-blue-400 hover:underline">Register</a></p>
+      </div>
+
+      <div id="registerForm" class="hidden" >
+        <h2 class="text-xl font-semibold mb-3 text-center">Register</h2>
+        <input id="regUsername" type="text" placeholder="Username" class="border border-gray-700 bg-gray-800 text-gray-200 p-3 w-full mb-3 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+        <input id="regPassword" type="password" placeholder="Password" class="border border-gray-700 bg-gray-800 text-gray-200 p-3 w-full mb-4 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+        <button onclick="register()" class="bg-green-600 hover:bg-green-700 w-full py-2 rounded-lg font-semibold shadow transition">Register</button>
+        <p class="mt-4 text-center text-sm text-gray-400">Already have an account? <a href="#" onclick="toggleAuth('login')" class="text-blue-400 hover:underline">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="appSection" class="hidden p-8 max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-extrabold text-blue-400">Car List</h1>
+      <div class="flex gap-2">
+        <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold shadow">+ Add Car</button>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold shadow">Logout</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700 bg-gray-900">
+      <table class="w-full text-sm text-left text-gray-300">
+        <thead class="bg-gray-800 text-gray-200 uppercase text-xs tracking-wider">
+          <tr>
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">License Plate</th>
+            <th class="px-4 py-3">Make</th>
+            <th class="px-4 py-3">Model</th>
+            <th class="px-4 py-3">Year</th>
+            <th class="px-4 py-3">Color</th>
+            <th class="px-4 py-3">Body Type</th>
+            <th class="px-4 py-3">Engine Type</th>
+            <th class="px-4 py-3">Transmission</th>
+            <th class="px-4 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="carsTableBody" class="divide-y divide-gray-700"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl w-96 p-6">
+      <h2 id="modalTitle" class="text-2xl font-semibold mb-4 text-blue-400">Add Car</h2>
+      <form id="carForm" onsubmit="saveCar(event)">
+        <input type="hidden" id="carId">
+
+        <label class="block text-gray-300 mb-1">License Plate</label>
+        <input type="text" id="licensePlateNumber" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Make</label>
+        <input type="text" id="make" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Model</label>
+        <input type="text" id="model" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Year</label>
+        <input type="number" id="year" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Color</label>
+        <input type="text" id="color" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Body Type</label>
+        <input type="text" id="bodyType" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Engine Type</label>
+        <input type="text" id="engineType" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <label class="block text-gray-300 mb-1">Transmission</label>
+        <input type="text" id="transmission" class="border border-gray-700 bg-gray-800 text-gray-200 p-2 w-full mb-5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+
+        <div class="flex justify-end gap-3">
+          <button type="button" onclick="closeModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold">Cancel</button>
+          <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
