@@ -1,109 +1,461 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car Management System</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="main.js"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Car Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body {
+        background-color: #0d0d0d;
+        color: #f5f5f5;
+        font-family: "Inter", sans-serif;
+      }
+      .bg-dark {
+        background-color: #1a1a1a;
+      }
+      .bg-red-accent {
+        background-color: #d62828;
+      }
+      .bg-red-accent:hover {
+        background-color: #bb2020;
+      }
+      .border-red-accent {
+        border-color: #d62828;
+      }
+    </style>
+  </head>
 
-  <!-- 🔐 AUTH SECTION -->
-  <div id="authSection" class="flex flex-col items-center justify-center h-screen">
-    <div class="bg-white shadow-md rounded p-6 w-96">
-      <h1 class="text-2xl font-bold mb-4 text-center">Car Management</h1>
+  <body class="min-h-screen flex flex-col items-center justify-center p-8">
+    <div id="root" class="w-full h-full"></div>
 
-      <!-- Login form -->
-      <div id="loginForm">
-        <h2 class="text-lg font-semibold mb-2">Login</h2>
-        <input id="loginUsername" type="text" placeholder="Username" class="border p-2 w-full mb-2 rounded">
-        <input id="loginPassword" type="password" placeholder="Password" class="border p-2 w-full mb-4 rounded">
-        <button onclick="login()" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">Login</button>
-        <p class="mt-3 text-center text-sm">No account? 
-          <a href="#" onclick="toggleAuth('register')" class="text-blue-500">Register</a>
-        </p>
-      </div>
+    <script type="text/babel">
+      const apiBase = "http://localhost:8080/api/cars";
+      const authBase = "http://localhost:8080/api/auth";
 
-      <!-- Register form -->
-      <div id="registerForm" class="hidden">
-        <h2 class="text-lg font-semibold mb-2">Register</h2>
-        <input id="regUsername" type="text" placeholder="Username" class="border p-2 w-full mb-2 rounded">
-        <input id="regPassword" type="password" placeholder="Password" class="border p-2 w-full mb-4 rounded">
-        <button onclick="register()" class="bg-green-600 text-white w-full py-2 rounded hover:bg-green-700">Register</button>
-        <p class="mt-3 text-center text-sm">Already have an account? 
-          <a href="#" onclick="toggleAuth('login')" class="text-blue-500">Login</a>
-        </p>
-      </div>
-    </div>
-  </div>
+      function App() {
+        const [cars, setCars] = React.useState([]);
+        const [token, setToken] = React.useState(localStorage.getItem("token") || "");
+        const [showModal, setShowModal] = React.useState(false);
+        const [editingCar, setEditingCar] = React.useState(null);
+        const [form, setForm] = React.useState({
+          licensePlateNumber: "",
+          make: "",
+          model: "",
+          year: "",
+          color: "",
+          bodyType: "",
+          engineType: "",
+          transmission: "",
+        });
+        const [formErrors, setFormErrors] = React.useState({});
+        const [authMode, setAuthMode] = React.useState("login");
+        const [authForm, setAuthForm] = React.useState({ username: "", password: "" });
+        const [errorMsg, setErrorMsg] = React.useState("");
+        const [inputErrorMsg, setInputErrorMsg] = React.useState("");
 
-  <!-- 🚗 MAIN APP SECTION -->
-  <div id="appSection" class="hidden p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">Car List</h1>
-      <div class="flex gap-2">
-        <button onclick="openCreateModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Car</button>
-        <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</button>
-      </div>
-    </div>
+        React.useEffect(() => {
+          if (token) fetchCars();
+        }, [token]);
 
-    <table class="w-full border-collapse border border-gray-300 bg-white">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">License Plate</th>
-          <th class="p-2 border">Make</th>
-          <th class="p-2 border">Model</th>
-          <th class="p-2 border">Year</th>
-          <th class="p-2 border">Color</th>
-          <th class="p-2 border">Body Type</th>
-          <th class="p-2 border">Engine Type</th>
-          <th class="p-2 border">Transmission</th>
-          <th class="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="carsTableBody"></tbody>
-    </table>
-  </div>
+        function fetchCars() {
+          fetch(apiBase, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+            .then((res) => {
+              if (!res.ok) throw new Error("Failed to fetch cars");
+              return res.json();
+            })
+            .then(setCars)
+            .catch(console.error);
+        }
 
-  <!-- ✏️ MODAL -->
-  <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-      <h2 id="modalTitle" class="text-xl font-semibold mb-4">Add Car</h2>
-      <form id="carForm" onsubmit="saveCar(event)">
-        <input type="hidden" id="carId">
+        function handleChange(e) {
+          const { id, value } = e.target;
+          setForm((prev) => ({ ...prev, [id]: value }));
+          setFormErrors((prev) => ({ ...prev, [id]: "" }));
+        }
 
-        <label class="block text-gray-700">License Plate</label>
-        <input type="text" id="licensePlateNumber" class="border p-2 w-full mb-2 rounded" required>
+        function handleAuthChange(e) {
+          const { id, value } = e.target;
+          setAuthForm((prev) => ({ ...prev, [id]: value }));
+          setInputErrorMsg("");
+          setErrorMsg("");
+        }
 
-        <label class="block text-gray-700">Make</label>
-        <input type="text" id="make" class="border p-2 w-full mb-2 rounded" required>
+        function validateAuthInputs() {
+          if (!authForm.username.trim() && !authForm.password.trim()) {
+            setInputErrorMsg("Username and Password are required.");
+            return false;
+          }
+          if (!authForm.username.trim()) {
+            setInputErrorMsg("Username is required.");
+            return false;
+          }
+          if (!authForm.password.trim()) {
+            setInputErrorMsg("Password is required.");
+            return false;
+          }
+          setInputErrorMsg("");
+          return true;
+        }
 
-        <label class="block text-gray-700">Model</label>
-        <input type="text" id="model" class="border p-2 w-full mb-2 rounded" required>
+        function validateCarForm() {
+          const errors = {};
+          Object.keys(form).forEach((key) => {
+            const value = String(form[key] || "").trim();
+            if (!value) errors[key] = "This field is required.";
+          });
+          setFormErrors(errors);
+          return Object.keys(errors).length === 0;
+        }
 
-        <label class="block text-gray-700">Year</label>
-        <input type="number" id="year" class="border p-2 w-full mb-2 rounded" required>
+        function loginUser(e) {
+          e.preventDefault();
+          setErrorMsg("");
+          if (!validateAuthInputs()) return;
 
-        <label class="block text-gray-700">Color</label>
-        <input type="text" id="color" class="border p-2 w-full mb-2 rounded" required>
+          fetch(`${authBase}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(authForm),
+          })
+            .then(async (res) => {
+              const text = await res.text();
+              let data;
+              try {
+                data = JSON.parse(text);
+              } catch {
+                data = { message: text };
+              }
+              if (!res.ok) throw new Error(data.message || "Invalid credentials");
+              return data;
+            })
+            .then((data) => {
+              localStorage.setItem("token", data.token);
+              setToken(data.token);
+            })
+            .catch((err) => setErrorMsg(err.message));
+        }
 
-        <label class="block text-gray-700">Body Type</label>
-        <input type="text" id="bodyType" class="border p-2 w-full mb-2 rounded" required>
+        function registerUser(e) {
+          e.preventDefault();
+          setErrorMsg("");
+          if (!validateAuthInputs()) return;
 
-        <label class="block text-gray-700">Engine Type</label>
-        <input type="text" id="engineType" class="border p-2 w-full mb-2 rounded" required>
+          fetch(`${authBase}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(authForm),
+          })
+            .then(async (res) => {
+              const text = await res.text();
+              let data;
+              try {
+                data = JSON.parse(text);
+              } catch {
+                data = { message: text };
+              }
+              if (!res.ok) throw new Error(data.message || "Registration failed");
+              alert("Registration successful! Please log in.");
+              setAuthMode("login");
+              setAuthForm({ username: "", password: "" });
+            })
+            .catch((err) => setErrorMsg(err.message));
+        }
 
-        <label class="block text-gray-700">Transmission</label>
-        <input type="text" id="transmission" class="border p-2 w-full mb-4 rounded" required>
+        function logout() {
+          localStorage.removeItem("token");
+          setToken("");
+          setCars([]);
+          setAuthForm({ username: "", password: "" });
+          setErrorMsg("");
+          setInputErrorMsg("");
+        }
 
-        <div class="flex justify-end gap-3">
-          <button type="button" onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</body>
+        function saveCar(e) {
+          e.preventDefault();
+          if (!validateCarForm()) return;
+
+          const method = editingCar ? "PUT" : "POST";
+          const url = editingCar ? `${apiBase}/${editingCar.id}` : apiBase;
+
+          fetch(url, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(form),
+          })
+            .then((res) => {
+              if (!res.ok) throw new Error("Failed to save car");
+              return res.json();
+            })
+            .then(() => {
+              setShowModal(false);
+              fetchCars();
+            })
+            .catch(console.error);
+        }
+
+        function openModal(car = null) {
+          setEditingCar(car);
+          setFormErrors({});
+          setForm(
+            car || {
+              licensePlateNumber: "",
+              make: "",
+              model: "",
+              year: "",
+              color: "",
+              bodyType: "",
+              engineType: "",
+              transmission: "",
+            }
+          );
+          setShowModal(true);
+        }
+
+        function deleteCar(id) {
+          if (!confirm("Delete this car?")) return;
+          fetch(`${apiBase}/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          })
+            .then(() => fetchCars())
+            .catch(console.error);
+        }
+
+        // ---------------- AUTH VIEW ----------------
+        if (!token) {
+          return (
+            <div className="flex items-center justify-center min-h-screen w-full bg-black">
+              <div className="bg-dark border border-red-accent rounded-2xl shadow-2xl p-12 w-full max-w-2xl text-center min-h-[80vh] flex flex-col justify-center">
+                <h1 className="text-5xl font-bold text-red-accent mb-4">
+                  {authMode === "login" ? "Login" : "Register"}
+                </h1>
+                <p className="text-gray-400 mb-8 text-lg">
+                  {authMode === "login"
+                    ? "Welcome back! Please sign in to manage your cars."
+                    : "Create an account to start managing cars easily."}
+                </p>
+
+                <form
+                  onSubmit={authMode === "login" ? loginUser : registerUser}
+                  className="space-y-4 text-left"
+                >
+                  <div>
+                    <label className="block text-gray-300 mb-1">Username</label>
+                    <input
+                      id="username"
+                      value={authForm.username}
+                      onChange={handleAuthChange}
+                      className="w-full p-3 bg-black text-white border border-gray-600 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 mb-1">Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      value={authForm.password}
+                      onChange={handleAuthChange}
+                      className="w-full p-3 bg-black text-white border border-gray-600 rounded"
+                    />
+                  </div>
+
+                  {inputErrorMsg && (
+                    <p className="text-red-500 text-sm mt-2 text-center">
+                      {inputErrorMsg}
+                    </p>
+                  )}
+                  {errorMsg && (
+                    <p className="text-red-500 text-sm mt-2 text-center">
+                      {errorMsg}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="w-full bg-red-accent py-3 rounded text-white font-semibold mt-4"
+                  >
+                    {authMode === "login" ? "Login" : "Register"}
+                  </button>
+                </form>
+
+                <p className="text-center mt-6 text-gray-400">
+                  {authMode === "login" ? (
+                    <>
+                      Don’t have an account?{" "}
+                      <button
+                        onClick={() => {
+                          setAuthMode("register");
+                          setAuthForm({ username: "", password: "" });
+                          setErrorMsg("");
+                          setInputErrorMsg("");
+                        }}
+                        className="text-red-accent hover:underline"
+                      >
+                        Register here
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Already registered?{" "}
+                      <button
+                        onClick={() => {
+                          setAuthMode("login");
+                          setAuthForm({ username: "", password: "" });
+                          setErrorMsg("");
+                          setInputErrorMsg("");
+                        }}
+                        className="text-red-accent hover:underline"
+                      >
+                        Login here
+                      </button>
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        // ---------------- MAIN DASHBOARD ----------------
+        return (
+          <div className="w-full h-screen flex flex-col bg-dark">
+            <header className="flex justify-between items-center p-4 bg-black border-b border-red-accent">
+              <h1 className="text-2xl font-bold text-red-accent">Car Management</h1>
+              <div>
+                <button
+                  onClick={() => openModal()}
+                  className="bg-red-accent px-4 py-2 rounded text-white mr-2"
+                >
+                  Add Car
+                </button>
+                <button
+                  onClick={logout}
+                  className="bg-gray-700 px-4 py-2 rounded text-white hover:bg-gray-600"
+                >
+                  Logout
+                </button>
+              </div>
+            </header>
+
+            <main className="flex-1 overflow-auto p-6">
+              <table className="w-full text-left border-collapse border border-gray-700">
+                <thead className="bg-black text-red-accent">
+                  <tr>
+                    <th className="p-2 border border-gray-700">ID</th>
+                    <th className="p-2 border border-gray-700">License Plate</th>
+                    <th className="p-2 border border-gray-700">Make</th>
+                    <th className="p-2 border border-gray-700">Model</th>
+                    <th className="p-2 border border-gray-700">Year</th>
+                    <th className="p-2 border border-gray-700">Color</th>
+                    <th className="p-2 border border-gray-700">Body Type</th>
+                    <th className="p-2 border border-gray-700">Engine</th>
+                    <th className="p-2 border border-gray-700">Transmission</th>
+                    <th className="p-2 border border-gray-700 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cars.map((car) => (
+                    <tr
+                      key={car.id}
+                      className="hover:bg-gray-900 transition-colors text-gray-200"
+                    >
+                      <td className="border border-gray-700 p-2">{car.id}</td>
+                      <td className="border border-gray-700 p-2">
+                        {car.licensePlateNumber}
+                      </td>
+                      <td className="border border-gray-700 p-2">{car.make}</td>
+                      <td className="border border-gray-700 p-2">{car.model}</td>
+                      <td className="border border-gray-700 p-2">{car.year}</td>
+                      <td className="border border-gray-700 p-2">{car.color}</td>
+                      <td className="border border-gray-700 p-2">{car.bodyType}</td>
+                      <td className="border border-gray-700 p-2">{car.engineType}</td>
+                      <td className="border border-gray-700 p-2">
+                        {car.transmission}
+                      </td>
+                      <td className="border border-gray-700 p-2 text-center space-x-2">
+                        <button
+                          onClick={() => openModal(car)}
+                          className="bg-yellow-500 text-black px-3 py-1 rounded"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deleteCar(car.id)}
+                          className="bg-red-accent px-3 py-1 rounded text-white"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </main>
+
+            {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div className="bg-dark border border-red-accent p-6 rounded-xl w-96">
+                  <h2 className="text-xl font-semibold text-red-accent mb-4">
+                    {editingCar ? "Edit Car" : "Add Car"}
+                  </h2>
+                  <form onSubmit={saveCar} className="space-y-2">
+                    {[
+                      "licensePlateNumber",
+                      "make",
+                      "model",
+                      "year",
+                      "color",
+                      "bodyType",
+                      "engineType",
+                      "transmission",
+                    ].map((field) => (
+                      <div key={field}>
+                        <label className="block text-gray-300 capitalize mb-1">
+                          {field.replace(/([A-Z])/g, " $1")}
+                        </label>
+                        <input
+                          id={field}
+                          value={form[field]}
+                          onChange={handleChange}
+                          className="w-full p-2 bg-black text-white border border-gray-600 rounded"
+                        />
+                        {formErrors[field] && (
+                          <p className="text-red-500 text-sm">{formErrors[field]}</p>
+                        )}
+                      </div>
+                    ))}
+                    <div className="flex justify-end space-x-2 mt-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                        className="bg-gray-600 text-white px-4 py-2 rounded"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="bg-red-accent text-white px-4 py-2 rounded"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
 </html>
