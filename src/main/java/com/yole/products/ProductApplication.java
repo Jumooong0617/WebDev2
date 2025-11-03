@@ -1,14 +1,14 @@
-package com.yole.carapp;
+package com.yole.products;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class
-CarAppApplication {
+ProductApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CarAppApplication.class, args);
+        SpringApplication.run(ProductApplication.class, args);
     }
 
 }
