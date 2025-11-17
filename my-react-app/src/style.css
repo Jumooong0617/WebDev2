@@ -1,0 +1,137 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #ff4d4d;
+  margin-bottom: 30px;
+}
+
+.profile-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.step-counter {
+  margin-bottom: 30px;
+}
+
+.product-card {
+  background-color: #111;
+  border: 2px solid #ff4d4d;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.5);
+}
+
+.product-card h2 {
+  color: #ff4d4d;
+  margin-bottom: 10px;
+}
+
+.product-card p {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.button-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.button-input-group input,
+.button-input-group button {
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #ff4d4d;
+  transition: all 0.3s ease;
+}
+
+.button-input-group input {
+  background-color: #222;
+  color: #f5f5f5;
+  padding: 0 10px;
+}
+
+.button-input-group button {
+  background-color: #ff4d4d;
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button-input-group button:hover {
+  background-color: #e63939;
+  border-color: #e63939;
+  transform: scale(1.05);
+}
+
+.details {
+  overflow: hidden;
+  max-height: 0;
+  padding: 0;
+  margin-top: 0;
+  transition: max-height 0.5s ease, padding 0.5s ease, margin-top 0.5s ease;
+  color: #ccc;
+}
+
+.details.show {
+  max-height: 200px;
+  padding-top: 10px;
+  margin-top: 10px;
+  animation: fadeSlide 0.5s forwards;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #ff4d4d;
+  color: #111;
+  border: 2px solid #ff4d4d;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #e63939;
+  border-color: #e63939;
+  transform: scale(1.05);
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #ff4d4d;
+  background-color: #222;
+  color: #f5f5f5;
+  margin-bottom: 10px;
+  width: 100%;
+}
