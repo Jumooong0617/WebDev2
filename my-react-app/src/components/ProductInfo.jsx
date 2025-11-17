@@ -6,7 +6,7 @@ export default function ProductInfo({ name, price, details, className }) {
   return (
     <div className={className}>
       <h2>{name}</h2>
-      <p>Price: ₹{price}</p>
+      <p>Price: ₱{price}</p>
 
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? "Hide Details" : "Show Details"}
